@@ -1,0 +1,55 @@
+<meta http-equiv="refresh" content={{fresh_speed}}>
+<div>
+    <canvas id="myCanvas"></canvas>
+</div>
+<script>
+    var s = document.location.search;
+    let ret = {}, t, r;
+    for (t of (s.startsWith('?') ? s.substr(1) : s).split('&'))
+        if (r = t.split('='), r[1])
+            ret[decodeURIComponent(r[0])] = decodeURIComponent(r[1]);
+        
+    var canvas=document.getElementById('myCanvas');
+    canvas.width = 1000;
+    canvas.height = 500;
+    var ctx=canvas.getContext('2d');
+    
+    var n = 50;
+    var col1 = '#ea6965';
+    var col2 = '#753432';
+    if (ret['n']) n = parseInt(ret['n']);
+    if (ret['col1']) col1 = '#' + ret['col1'];
+    if (ret['col2']) col2 = '#' + ret['col2'];
+
+    var s = [];
+    for (var i = 1; i <= n; i++)
+        s[i] = Math.floor(Math.random() * 2);
+    var ans = [];
+    for (var i = 1; i <= n + n; i++) {
+        ans[i] = [];
+        for (var j = 1; j <= n + n; j++)
+            ans[i][j] = 0;
+    }
+    for (var i = 1; i <= n; i++) {
+		for (var x = 1, d = 0; 2 * (n - i + 1) - x >= 1; x++, d ^= 1)
+			ans[x][2 * (n - i + 1) - x] = s[i] ^ d;
+		for (var x = 2 * i, d = 0; x <= n + n; x++, d ^= 1)
+			ans[x][2 * (n + i) - x] = s[i] ^ d;
+		for (var x = 1, d = 0; x + 2 * (n - i) + 1 <= n + n; x++, d ^= 1)
+			ans[x][x + 2 * (n - i) + 1] = s[i] ^ d;
+		for (var x = 2 * (n - i + 1), d = 0; x <= n + n; x++, d ^= 1)
+			ans[x][x - 2 * (n - i) - 1] = s[i] ^ d;
+	}
+    for (var i = 1; i <= n + n; i++)
+    for (var j = 1; j <= n + n; j++) {
+        if (ans[i][j]) 
+            ctx.fillStyle = col1;
+        else
+            ctx.fillStyle = col2;
+        ctx.fillRect(5 * (i - 1), 5 * (j - 1), 5, 5);
+    }
+    
+</script>
+<form action="/" method="post">
+    <input name="qu" type="submit" value="speed_down">
+    <input name="su" type="submit" value="speed_up">

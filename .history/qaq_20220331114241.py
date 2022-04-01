@@ -1,0 +1,20 @@
+from ast import Return
+import re
+from urllib import request
+from flask import Flask,render_template
+app = Flask(__name__)
+# receive wasd from micro bit
+# by leap_frog
+
+# snake
+# send the map to flask
+# by ljc00118
+
+fresh_s = 2
+@app.route('/', methods=['GET', 'POST'])
+def index() :
+    # send fresh_speed
+    ansu = request.form.get('su')
+    ansv = re
+    return render_template('draw.html', fresh_speed=fresh_s)
+app.run()
